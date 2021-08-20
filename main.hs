@@ -22,7 +22,7 @@ main = do
       putStrLn Jogador.pesquisarJogador
       main
     "4" -> do
-      putStrLn Jogador.compararJogadores
+      Jogador.compararJogadores
       main
     "5" -> do
       putStrLn "Encerrando execução"
