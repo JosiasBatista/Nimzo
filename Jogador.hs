@@ -6,8 +6,26 @@ module Jogador
 
 import Pontuacao
 
-adicionarJogador :: String
-adicionarJogador = "Adicionando um jogador"
+adicionarJogador :: IO()
+adicionarJogador = do
+  putStrLn "Insira o nome do jogador que você quer cadastrar"
+  putStrLn "(Caso deseje voltar ao menu anterior digite '0')"
+
+  nomeJogador <- getLine
+
+  if nomeJogador == "0"
+    then return ()
+    else do
+      putStrLn $ adicionaJogador nomeJogador
+      putStrLn "Deseja adicionar outro jogador? [y/n]"
+      resposta <- getLine
+      gerenciaFluxo resposta
+
+gerenciaFluxo :: String -> IO()
+gerenciaFluxo resposta = if resposta == "y" then adicionarJogador else return ()
+
+adicionaJogador :: String -> String
+adicionaJogador nomeJogador = "Jogador " ++ nomeJogador ++ " adicionado /TODO criar função de adicionar jogador"
 
 pesquisarJogador :: String
 pesquisarJogador = "Procurando um jogador"
