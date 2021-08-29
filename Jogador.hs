@@ -68,5 +68,9 @@ comparaJogadoresMenu = do
   putStrLn "Jogador 2:"
   jogadorDois <- getLine
 
-  print (comparaPontos (read jogadorUm) (read jogadorDois))
+  if jogadorUm == "0" || jogadorDois == "0"
+  then
+    return ()
+  else
+    print (comparaPontos (read jogadorUm) (read jogadorDois))
   

@@ -19,13 +19,13 @@ adicionarPartida = do
     else do
       putStrLn (adicionaPartida (read idBrancas) (read idPretas) resultado)
       putStrLn "\n"
-      putStrLn "Deseja adicionar outra partida? [S/N]"
+      putStrLn "Deseja adicionar outra partida? [y/n]"
 
       resposta <- getLine
       gerenciaFluxo resposta
 
 gerenciaFluxo :: String -> IO()
-gerenciaFluxo resposta = if resposta == "N" then return() else adicionarPartida
+gerenciaFluxo resposta = if resposta == "n" then return() else adicionarPartida
       
 
 adicionaPartida :: Int -> Int -> String -> String
