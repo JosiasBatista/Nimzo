@@ -20,7 +20,7 @@ main = do
       Partida.adicionarPartida
       main
     "3" -> do
-      putStrLn Jogador.pesquisarJogador
+      Jogador.pesquisarJogador
       main
     "4" -> do
       Jogador.compararJogadores
