@@ -1,4 +1,3 @@
-{-# LANGUAGE ConstraintKinds #-}
 module PlayerUtil where
 
 data Player = Player {name :: String,
