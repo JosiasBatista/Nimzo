@@ -1,7 +1,7 @@
 module Menu where
 
 import System.Exit (exitSuccess)
-import PlayerUtil
+import MatchUtil
 
 menu :: IO ()
 menu = do
