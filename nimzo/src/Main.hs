@@ -4,4 +4,4 @@ import Menu
 
 main :: IO ()
 main = do
-  putStrLn "hello world"
+  menu

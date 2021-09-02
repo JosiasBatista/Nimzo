@@ -5,6 +5,8 @@ data Match = Match {white :: Player,
                     idGame :: Integer,
                     result :: Char}
 
+
+
 data Player = Player {name :: String,
                       idPlayer :: Integer,
                       elo :: Rational,
