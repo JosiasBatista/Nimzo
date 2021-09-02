@@ -1,7 +1,10 @@
 module Main where
 
+import Storage
+
 import Menu 
 
 main :: IO ()
 main = do
-  menu
+  database <- load
+  menu database

@@ -1,17 +1,20 @@
 module Menu where
 
+import Control.Monad (forever)
 import System.Exit (exitSuccess)
 import MatchUtil
+import Storage
 
-menu :: IO ()
-menu = do
+
+menu :: Database -> IO ()
+menu database = forever $ do
       putStrLn . unlines $ map concatNums choices
       choice <- getLine
       case validate choice of
-         Just n  -> execute . read $ choice
+         Just n  -> execute . read $ choice 
          Nothing -> putStrLn "Invalid option! Please try again"
 
-      menu
+      return ()
    where concatNums (i, (s, _)) = show i ++ ".) " ++ s
 
 validate :: String -> Maybe Int
