@@ -1,4 +1,4 @@
-module Menu where
+module BoilerPlateMenu where
 
 menu :: IO ()
 menu = do
