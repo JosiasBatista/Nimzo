@@ -17,6 +17,25 @@ save database = do
   saveMatchesList database
 -- essa função vai salvar em algum arquivo .txt os jogadores e jogos
 
+readFile :: String -> IO [String]
+readFile fileSrc = do
+  file <- Strict.readFile fileSrc
+  let lines = lines file
+  return lines
+
+loadPlayers :: [String] -> [Player]
+loadPlayers fileLines = [parsePlayer line | line <- lines]
+
+parsePlayer :: String -> Player
+parsePlayer line =
+  Player {
+    Player.name = head data',
+    Player.idPlayer = data' !! 1,
+    Player.elo = data' !! 2
+  }
+  where
+    data' = splitOn "," line
+
 load :: IO Database
 load = return(Database {matches_db=[], players_db=[]})
 -- Carregar database de algum arquivo
