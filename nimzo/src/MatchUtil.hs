@@ -3,9 +3,10 @@ module MatchUtil where
 data Match = Match {white :: Player,
                     black :: Player,
                     idGame :: Integer,
-                    result :: Char} deriving Show
+                    result :: Char}
 
-
+instance Show Match where
+    show match = show (idGame match)  
 
 data Player = Player {name :: String,
                       idPlayer :: Integer,
