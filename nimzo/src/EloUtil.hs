@@ -1,6 +1,9 @@
 module EloUtil where
 
 import System.Exit (exitFailure)
+
+
+
 winExp elo1 elo2 =
     1.0 / (1.0 + 1.0 * (10 ** (1.0 * (elo1 - elo2) / 400)))
 
