@@ -67,8 +67,15 @@ addGame database = do
 
     let pos1 = toInteger (length (players_db (unsafePerformIO database))) - idPlayer pw + 1
     let pos2 = toInteger (length (players_db (unsafePerformIO database))) - idPlayer pb + 1
-    let newPlayers1 = updateList [pw_updated] (fromInteger pos1) (players_db (unsafePerformIO database))
-    let newPlayers2 = updateList [pb_updated] (fromInteger pos2) newPlayers1
+
+    let elo1 = elo pw_updated
+    let elo2 = elo pb_updated
+    let newElo = adjustElo elo1 elo2 (head resultado)
+    let pw_updated2 = setElo pw_updated (fst newElo)
+    let pb_updated2 = setElo pb_updated (snd newElo)
+
+    let newPlayers1 = updateList [pw_updated2] (fromInteger pos1) (players_db (unsafePerformIO database))
+    let newPlayers2 = updateList [pb_updated2] (fromInteger pos2) newPlayers1
 
 
 
