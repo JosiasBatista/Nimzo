@@ -3,14 +3,16 @@ module MatchUtil where
 data Match = Match {white :: Player,
                     black :: Player,
                     idGame :: Integer,
-                    result :: Char}
+                    result :: Char} deriving Show
 
 
 
 data Player = Player {name :: String,
                       idPlayer :: Integer,
                       elo :: Rational,
-                      matches :: [Match]}
+                      matches :: [Match]} deriving Show
+
+
 
 addMatch :: Player -> Match -> Player
 addMatch player' match' = Player {name=name player', idPlayer=idPlayer player', elo=elo player', 

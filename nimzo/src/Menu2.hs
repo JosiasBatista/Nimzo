@@ -41,8 +41,36 @@ addPlayer database name = newDatabase where
     newDatabase = Database {matches_db=matches_db database, players_db= player : players_db database}
     player = createPlayer name (toInteger  (length (players_db database)  + 1))
 
-addGame database = undefined
-searchPlayer database = undefined
+addGame :: Database -> IO Database
+addGame database = do
+    putStrLn "Insira as informações da partida:"
+    putStrLn "ID do jogador com peças brancas: "
+    idBrancas <- getLine
+    let idw = read idBrancas :: Integer
+    let pw = head (filter (\x -> idPlayer x == idw) (players_db database))
+    
+    putStrLn "ID do jogador com peças pretas: "
+    idPretas <- getLine
+    let idb = read idPretas :: Integer
+    let pb = head (filter (\x -> idPlayer x == idb) (players_db database))
+    putStrLn "Vencedor (b - branco, p - preto, e - empate): "
+    resultado <- getLine
+
+    let match = Match {white=pw, black=pb, idGame= toInteger (length (matches_db database) + 1), result= head resultado}
+    let newDatabase = Database {matches_db= match : matches_db database, players_db=players_db database}
+    return newDatabase
+
+searchPlayer :: Database -> IO Database
+searchPlayer database = do
+    putStrLn "Digite o nome do jogador que você está buscando:"
+    name_s <- getLine
+    let results = filter (\x -> name x == name_s) (players_db database)
+    putStrLn "Foram encontrados os seguintes Jogadores com esse nome:"
+    mapM_ print results
+
+    return database
+    
+
 comparePlayers database = undefined
 quit =
     --Colocar o comando para salvar os arquivos aqui
