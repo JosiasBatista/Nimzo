@@ -115,7 +115,8 @@ comparePlayers database = do
 
     database
 
-quit database =
+quit database = do
+    save (database)
     --Colocar o comando para salvar os arquivos aqui
     exitSuccess
 

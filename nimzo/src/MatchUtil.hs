@@ -12,6 +12,23 @@ data Player = Player {name :: String,
                       elo :: Double,
                       matches :: [Match]} deriving Show
 
+playerToString :: Player -> Bool -> String
+playerToString player showMatches =
+  name' ++ "," ++ idPlayer' ++ "," ++ elo'
+  where
+    name' = name player
+    idPlayer' = show (idPlayer player)
+    elo' = show (elo player)
+
+matchToString :: Match -> String
+matchToString match =
+  "(" ++ playerToString playerW False ++ "),(" ++ playerToString playerB False ++ ")," ++ idGame' ++ ","
+  where
+    playerW = white match
+    playerB = black match
+    idGame' = show (idGame match)
+    result' = show (result match)
+
 addMatch :: Player -> Match -> Player
 addMatch player' match' = Player {name=name player', idPlayer=idPlayer player', elo=elo player', 
 matches=match' : matches player'}
