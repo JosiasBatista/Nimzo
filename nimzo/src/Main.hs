@@ -6,6 +6,5 @@ import Menu
 
 main :: IO Database
 main = do
-  --database <- load 
-
+  --database <- load
   menu load
