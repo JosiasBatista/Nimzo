@@ -1,4 +1,4 @@
-module Menu where
+module Menu2 where
 
 import Control.Monad (forever)
 import System.Exit (exitSuccess)
@@ -6,7 +6,7 @@ import MatchUtil
 import Storage
 
 
-menu :: Database -> IO ()
+menu :: Database -> IO Database
 menu database = forever $ do
     putStrLn "Bem vindo ao Nimzo"
     putStrLn "Escolha uma das opções abaixo"
@@ -24,24 +24,31 @@ menu database = forever $ do
         "3" -> searchPlayer database
         "4" -> comparePlayers database
         "5" -> quit
-        _   -> putStrLn "Opção inválida! Por favor, selecione novamente."
+        _   -> invalid database
 
 
+addPlayerMenu :: Database -> IO Database
 addPlayerMenu  database = do
     putStrLn "insira o nome do jogador que você quer cadastrar,\nou digite '0' para retornar ao menu anterior"
     name <- getLine
-    if name == "0"
-        then return ()
-    else
-        undefined 
+    case name of
+        "0" -> return database
+        _   -> return(addPlayer database name)
 
 
-addPlayer :: [Player] -> String -> [Player]
-addPlayer players name = player : players where
-    player = createPlayer name (toInteger  (length players + 1))
+addPlayer :: Database  -> String -> Database
+addPlayer database name = newDatabase where
+    newDatabase = Database {matches_db=matches_db database, players_db= player : players_db database}
+    player = createPlayer name (toInteger  (length (players_db database)  + 1))
+
 addGame database = undefined
 searchPlayer database = undefined
 comparePlayers database = undefined
 quit =
     --Colocar o comando para salvar os arquivos aqui
     exitSuccess
+
+invalid :: Database -> IO Database 
+invalid database = do
+     putStrLn "Opção inválida! Por favor, selecione novamente."
+     return database

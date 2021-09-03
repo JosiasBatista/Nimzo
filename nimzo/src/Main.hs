@@ -2,9 +2,10 @@ module Main where
 
 import Storage
 
-import Menu 
+import Menu2
 
-main :: IO ()
+main :: IO Database
 main = do
-  database <- load
-  menu database
+  --database <- load 
+
+  menu load
