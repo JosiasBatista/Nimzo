@@ -2,6 +2,8 @@ module Storage where
 
 import MatchUtil
 import System.IO.Unsafe (unsafePerformIO)
+import qualified System.IO.Strict as SIO
+import Data.List.Split (splitOn)
 
 type Matches = [Match]
 type Players = [Player]
@@ -19,22 +21,38 @@ save database = do
 
 readFile :: String -> IO [String]
 readFile fileSrc = do
-  file <- Strict.readFile fileSrc
-  let lines = lines file
-  return lines
+  file <- SIO.readFile fileSrc
+  let linesList = lines file
+  return linesList
+
+loadMatches :: [String] -> [Match]
+loadMatches fileLines = [parseMatch line | line <- fileLines]
+
+parseMatch :: String -> Match
+parseMatch line =
+  MatchUtil.Match {
+    white = parsePlayer (filter (not . (`elem` ")(")) (head data')),
+    black = parsePlayer (filter (not . (`elem` ")(")) (data' !! 1)),
+    idGame = read (data' !! 2) :: Integer,
+    result = read (data' !! 3)
+  }
+  where 
+    data' = splitOn "," line
 
 loadPlayers :: [String] -> [Player]
-loadPlayers fileLines = [parsePlayer line | line <- lines]
+loadPlayers fileLines = [parsePlayer line | line <- fileLines]
 
 parsePlayer :: String -> Player
 parsePlayer line =
-  Player {
-    Player.name = head data',
-    Player.idPlayer = data' !! 1,
-    Player.elo = data' !! 2
+  MatchUtil.Player {
+    name = head data',
+    idPlayer = read (data' !! 1) :: Integer,
+    elo = read (data' !! 2) :: Double,
+    matches = []
   }
   where
     data' = splitOn "," line
+
 
 load :: IO Database
 load = return(Database {matches_db=[], players_db=[]})
@@ -50,10 +68,12 @@ saveMatch (h:t) = do
   saveMatch t
 
 savePlayerList :: IO Database -> IO()
-savePlayerList database = savePlayer (players_db (unsafePerformIO database))
+savePlayerList database = do
+  savePlayer (players_db (unsafePerformIO database))
 
 savePlayer :: [Player] -> IO()
 savePlayer [] = return ()
 savePlayer (h:t) = do
+  putStrLn (playerToString h False)
   appendLine (playerToString h False) "./database/players.csv"
   savePlayer t

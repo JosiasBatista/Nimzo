@@ -7,4 +7,4 @@ import Menu
 main :: IO Database
 main = do
   --database <- load
-  menu load
+  menu load 0

@@ -16,8 +16,8 @@ menuSelection o
     | otherwise  = invalid
 
 
-menu :: IO Database -> IO Database
-menu database = do
+menu :: IO Database -> Int -> IO Database
+menu database rep = do
     putStrLn "Bem vindo ao Nimzo"
     putStrLn "Escolha uma das opções abaixo"
     putStrLn "1 - Cadastrar um novo jogador"
@@ -28,9 +28,18 @@ menu database = do
 
     option <- getLine
 
-    newDatabase <- menuSelection option database
-    menu (return newDatabase)
+    newDatabase <- menuSelection option (chooseDatabase database rep)
+    menu (return newDatabase) (rep + 1)
 
+chooseDatabase :: IO Database -> Int -> IO Database
+chooseDatabase database value = if (value == 0) then loadDatabase database else database
+
+loadDatabase :: IO Database -> IO Database
+loadDatabase database = do
+  players <- Storage.readFile "./database/players.csv"
+  matches <- Storage.readFile "./database/matches.csv"
+  return (Database {matches_db=Storage.loadMatches matches, players_db=Storage.loadPlayers players})
+  -- return (Database {matches_db=matches_db (unsafePerformIO database), players_db=Storage.loadPlayers players})
 
 addPlayerMenu :: IO Database -> IO Database
 addPlayerMenu  database = do

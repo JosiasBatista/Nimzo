@@ -23,7 +23,7 @@ playerToString player showMatches =
 
 matchToString :: Match -> String
 matchToString match =
-  "(" ++ playerToString playerW False ++ "),(" ++ playerToString playerB False ++ ")," ++ idGame' ++ ","
+  "(" ++ playerToString playerW False ++ "),(" ++ playerToString playerB False ++ ")," ++ idGame' ++ "," ++ result'
   where
     playerW = white match
     playerB = black match
