@@ -36,9 +36,9 @@ chooseDatabase database value = if (value == 0) then loadDatabase database else 
 
 loadDatabase :: IO Database -> IO Database
 loadDatabase database = do
-  players <- Storage.readFile "./database/players.csv"
   matches <- Storage.readFile "./database/matches.csv"
-  return (Database {matches_db=Storage.loadMatches matches, players_db=Storage.loadPlayers players})
+  players <- Storage.readFile "./database/players.csv"
+  return (Database {matches_db=Storage.loadMatches matches database, players_db=Storage.loadPlayers players database})
   -- return (Database {matches_db=matches_db (unsafePerformIO database), players_db=Storage.loadPlayers players})
 
 addPlayerMenu :: IO Database -> IO Database

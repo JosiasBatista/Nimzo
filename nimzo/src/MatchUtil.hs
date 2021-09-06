@@ -15,11 +15,16 @@ data Player = Player {name :: String,
 
 playerToString :: Player -> Bool -> String
 playerToString player showMatches =
-  name' ++ "," ++ idPlayer' ++ "," ++ elo'
+  name' ++ "," ++ idPlayer' ++ "," ++ elo' ++ ",[" ++ (mountMatchesString matches') ++ "]"
   where
     name' = name player
     idPlayer' = show (idPlayer player)
     elo' = show (elo player)
+    matches' = matches player
+
+mountMatchesString :: [Match] -> String
+mountMatchesString [] = ""
+mountMatchesString (h:t) = show (h) ++ mountMatchesString t
 
 matchToString :: Match -> String
 matchToString match =

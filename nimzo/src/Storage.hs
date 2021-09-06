@@ -25,34 +25,40 @@ readFile fileSrc = do
   let linesList = lines file
   return linesList
 
-loadMatches :: [String] -> [Match]
-loadMatches fileLines = [parseMatch line | line <- fileLines]
+loadMatches :: [String] -> IO Database-> [Match]
+loadMatches fileLines database = [parseMatch line database | line <- fileLines]
 
-parseMatch :: String -> Match
-parseMatch line =
+parseMatch :: String -> IO Database-> Match
+parseMatch line database =
   MatchUtil.Match {
-    white = parsePlayer (filter (not . (`elem` ")(")) (head data')),
-    black = parsePlayer (filter (not . (`elem` ")(")) (data' !! 1)),
+    white = parsePlayer (filter (not . (`elem` ")(")) (head data')) (database),
+    black = parsePlayer (filter (not . (`elem` ")(")) (data' !! 1)) (database),
     idGame = read (data' !! 2) :: Integer,
     result = read (data' !! 3)
   }
   where 
     data' = splitOn "," line
 
-loadPlayers :: [String] -> [Player]
-loadPlayers fileLines = [parsePlayer line | line <- fileLines]
+loadPlayers :: [String] -> IO Database -> [Player]
+loadPlayers fileLines database = [parsePlayer (line) (database) | line <- fileLines]
 
-parsePlayer :: String -> Player
-parsePlayer line =
+parsePlayer :: String -> IO Database -> Player
+parsePlayer line database =
   MatchUtil.Player {
     name = head data',
     idPlayer = read (data' !! 1) :: Integer,
     elo = read (data' !! 2) :: Double,
-    matches = []
+    matches = generateMatchesList (filter (not . (`elem` "][,")) (data' !! 3)) (database) 
   }
   where
     data' = splitOn "," line
 
+generateMatchesList :: String -> IO Database -> [Match]
+generateMatchesList values database = getMatches (map (read . (:"")) values :: [Integer]) (database)
+
+getMatches :: [Integer] -> IO Database-> [Match]
+getMatches [] database = []
+getMatches (h:t) database = filter (\x -> idGame x == h) (matches_db (unsafePerformIO database)) ++ getMatches t database 
 
 load :: IO Database
 load = return(Database {matches_db=[], players_db=[]})
@@ -74,6 +80,5 @@ savePlayerList database = do
 savePlayer :: [Player] -> IO()
 savePlayer [] = return ()
 savePlayer (h:t) = do
-  putStrLn (playerToString h False)
   appendLine (playerToString h False) "./database/players.csv"
   savePlayer t
